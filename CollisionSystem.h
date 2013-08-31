@@ -15,14 +15,13 @@
 class CollisionSystem : public ISystem, public IListener<EntityMovedMessage>
 {
 private:
-    std::set<unsigned int> _MovedEntities;
+    std::list<unsigned int> _MovedEntities;
 private:
     void OnMessage(EntityMovedMessage& msg) override;
     bool CheckCollision(Entity* e1, Entity* e2, sf::Vector2f& norm);
     bool CheckCollisions(unsigned int id, sf::Vector2f& norm);
 public:
     CollisionSystem() : ISystem("Collision") { }
-    ~CollisionSystem() { }
 
     void Update(sf::Time dt) override;
     bool ValidateEntity(unsigned int ID) override;
