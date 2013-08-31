@@ -139,17 +139,14 @@ bool CollisionSystem::ValidateEntity(unsigned int ID)
 {
     Entity* e = this->GetEntity(ID);
 
-    bool rtn = e->HasComponent("Collider") && e->HasComponent("Position");
-
-    if(rtn)
+    sf::Vector2f norm;
+    if(CheckCollisions(ID, norm))
     {
-        EntityMovedMessage msg;
-        msg.ID = ID;
-        sf::Vector2f const& pos = e->GetComponent<PositionComponent>("Position")->GetPosition();
-        msg.oldPosition = pos;
-        msg.newPosition = pos;
-        Emit<EntityMovedMessage>(msg);
+        DestroyEntityMessage dmsg;
+        dmsg.ID = ID;
+        Emit<DestroyEntityMessage>(dmsg);
+        return false;
     }
 
-    return rtn;
+    return e->HasComponent("Collider") && e->HasComponent("Position");
 }
