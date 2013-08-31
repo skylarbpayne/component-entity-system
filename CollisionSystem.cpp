@@ -74,52 +74,60 @@ bool CollisionSystem::CheckCollision(Entity* e1, Entity* e2, sf::Vector2f& norm)
     return true;
 }
 
+bool CollisionSystem::CheckCollisions(unsigned int id, Vector2f &norm)
+{
+    Entity* e1 = this->GetEntity(id);
+    Entity* e2 = nullptr;
+
+    std::set<unsigned int>::iterator eit;
+
+    for(eit = _EntitiesToUpdate.begin(); eit != _EntitiesToUpdate.end(); eit++)
+    {
+        if(id == *eit)
+        {
+            continue;
+        }
+
+        e2 = this->GetEntity(*eit);
+
+        if(CheckCollision(e1, e2, norm))
+        {
+            CollisionMessage cmsg;
+            cmsg.ID1 = id;
+            cmsg.ID2 = *eit;
+            cmsg.norm.x = norm.x;
+            cmsg.norm.y = norm.y;
+            Emit<CollisionMessage>(cmsg);
+            return true;
+        }
+    }
+    return false;
+}
+
 /**
  * @brief CollisionSystem::Update checks for collisions between entities that have moved and all other entities
  * @param dt frame time
  */
 void CollisionSystem::Update(sf::Time dt)
 {
-    Entity* e1 = nullptr;
-    Entity* e2 = nullptr;
     PositionComponent* p1 = nullptr;
     sf::Vector2f norm;
     std::set<unsigned int> movedEntities = _MovedEntities;
+    _MovedEntities.clear();
     std::set<unsigned int>::iterator mit;
-    std::set<unsigned int>::iterator eit;
 
     for(mit = movedEntities.begin(); mit != movedEntities.end(); mit++)
     {
-        for(eit = _EntitiesToUpdate.begin(); eit != _EntitiesToUpdate.end(); eit++)
+        p1 = this->GetEntity(*mit)->GetComponent<PositionComponent>("Position");
+
+        if(CheckCollisions(*mit, norm))
         {
-            if(*mit == *eit)
-            {
-                continue;
-            }
-
-            e1 = this->GetEntity(*mit);
-            e2 = this->GetEntity(*eit);
-            p1 = e1->GetComponent<PositionComponent>("Position");
-
-            if(CheckCollision(e1, e2, norm))
-            {
-                MoveEntityMessage msg;
-                msg.ID = *mit;
-                msg.newPosition.x = p1->GetPosition().x - norm.x;
-                msg.newPosition.y = p1->GetPosition().y - norm.y;
-                Emit<MoveEntityMessage>(msg);
-
-                CollisionMessage cmsg;
-                cmsg.ID1 = *mit;
-                cmsg.ID2 = *eit;
-                cmsg.norm.x = norm.x;
-                cmsg.norm.y = norm.y;
-                Emit<CollisionMessage>(cmsg);
-
-                continue;
-            }
+            MoveEntityMessage msg;
+            msg.ID = *mit;
+            msg.newPosition.x = p1->GetPosition().x - norm.x;
+            msg.newPosition.y = p1->GetPosition().y - norm.y;
+            Emit<MoveEntityMessage>(msg);
         }
-        _MovedEntities.erase(*mit);
     }
 }
 

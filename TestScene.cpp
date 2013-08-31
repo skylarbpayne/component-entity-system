@@ -52,8 +52,8 @@ bool TestScene::Load()
     rm.AddFont("Lorena.ttf");
     rm.AddTexture("spaceship.png");
 
-    ef.Create("entity.lua", 50, 50);
-    ef.Create("entity2.lua", 400, 400);
+    ef.Create("entity2.lua", 50, 50);
+    ef.Create("entity.lua", 400, 400);
     return true;
 }
 

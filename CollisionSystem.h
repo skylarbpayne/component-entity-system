@@ -19,6 +19,7 @@ private:
 private:
     void OnMessage(EntityMovedMessage& msg) override;
     bool CheckCollision(Entity* e1, Entity* e2, sf::Vector2f& norm);
+    bool CheckCollisions(unsigned int id, sf::Vector2f& norm);
 public:
     CollisionSystem() : ISystem("Collision") { }
     ~CollisionSystem() { }
