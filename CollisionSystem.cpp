@@ -78,7 +78,7 @@ bool CollisionSystem::CheckCollision(Entity* e1, Entity* e2, sf::Vector2f& norm)
  * @brief CollisionSystem::Update checks for collisions between entities that have moved and all other entities
  * @param dt frame time
  */
-void CollisionSystem::Update(unsigned int dt)
+void CollisionSystem::Update(sf::Time dt)
 {
     Entity* e1 = nullptr;
     Entity* e2 = nullptr;

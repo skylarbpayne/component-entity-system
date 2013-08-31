@@ -34,7 +34,7 @@ BehaviorSystem::~BehaviorSystem()
  * @brief BehaviorSystem::Update updates all behaviors of all entities
  * @param dt time since last frame
  */
-void BehaviorSystem::Update(unsigned int dt)
+void BehaviorSystem::Update(sf::Time dt)
 {
     std::list<IBehavior*>::iterator bit;
 

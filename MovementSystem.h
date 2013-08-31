@@ -15,7 +15,7 @@ class MovementSystem : public ISystem, public IListener<MoveEntityMessage>, publ
 {
 public:
     MovementSystem() : ISystem("Movement") { }
-    void Update(unsigned int dt) override;
+    void Update(sf::Time dt) override;
     bool ValidateEntity(unsigned int ID) override;
 
     void OnMessage(MoveEntityMessage& msg) override;

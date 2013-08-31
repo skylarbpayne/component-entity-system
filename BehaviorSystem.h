@@ -21,6 +21,6 @@ public:
     BehaviorSystem();
     ~BehaviorSystem();
 
-    void Update(unsigned int dt) override;
+    void Update(sf::Time dt) override;
     bool ValidateEntity(unsigned int ID) override;
 };

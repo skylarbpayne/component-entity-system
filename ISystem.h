@@ -27,7 +27,7 @@ public:
 	void Deactivate() { _Active = false; }
 	bool isActive() const { return _Active; }
     const char* GetType() const { return _Type; }
-    virtual void Update(unsigned int dt) = 0;
+    virtual void Update(sf::Time dt) = 0;
     virtual bool ValidateEntity(unsigned int ID) = 0;
 };
 

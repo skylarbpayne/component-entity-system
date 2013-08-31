@@ -16,7 +16,7 @@
  * @brief MovementSystem::Update Updates all entities with position and movement components
  * @param dt the time splice between frames
  */
-void MovementSystem::Update(unsigned int dt)
+void MovementSystem::Update(sf::Time dt)
 {
     std::set<unsigned int>::iterator it;
 

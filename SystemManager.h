@@ -18,13 +18,12 @@ class SystemManager
 {
 private:
 	bool _Active;
-    unsigned long _LastTime;
     sf::Clock _SystemClock;
 	std::list<ISystem*> _Systems;
 private:
     bool Find(const char* type, std::list<ISystem*>::iterator& loc);
 public:
-    SystemManager() : _Active(true), _LastTime(0) {}
+    SystemManager() : _Active(true) { }
     ~SystemManager();
 
 	bool Add(ISystem* sys);

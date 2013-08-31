@@ -8,7 +8,7 @@
 #include "IRenderComponent.h"
 #include "RenderSystem.h"
 
-void RenderSystem::Update(unsigned int dt)
+void RenderSystem::Update(sf::Time dt)
 {
     std::set<unsigned int>::iterator it;
 

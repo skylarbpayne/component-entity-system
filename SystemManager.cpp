@@ -130,16 +130,13 @@ bool SystemManager::isActive() const
 **/
 void SystemManager::Update()
 {
-    unsigned long currentTime = _SystemClock.getElapsedTime().asMicroseconds();
-
 	std::list<ISystem*>::iterator it;
 	for(it = _Systems.begin(); it != _Systems.end(); it++)
 	{
 		if( (*it) && (*it)->isActive())
 		{
-            (*it)->Update(currentTime - _LastTime);
+            (*it)->Update(_SystemClock.getElapsedTime());
 		}
 	}
-
-    _LastTime = currentTime;
+    _SystemClock.restart();
 }
