@@ -36,7 +36,7 @@ bool TestScene::Load()
     sm.Add(rs);
     MovementSystem* ms = new MovementSystem();
     sm.Add(ms);
-    CollisionSystem* cs = new CollisionSystem();
+    CollisionSystem* cs = new CollisionSystem(sf::Vector2f(this->GetWindow()->getSize()), sf::Vector2f(200, 200));
     sm.Add(cs);
     BehaviorSystem* bs = new BehaviorSystem();
     sm.Add(bs);
