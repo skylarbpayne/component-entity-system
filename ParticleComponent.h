@@ -10,8 +10,12 @@
 
 #include "IComponent.h"
 #include <SFML/Graphics.hpp>
+#include <vector>
 
-class ParticleComponent : public IComponent, public Drawable, public Transformable {
+using namespace sf;
+using namespace std;
+
+class ParticleComponent : public IComponent {
     friend class ParticleSystem;
 private:
     struct Particle{
@@ -20,7 +24,7 @@ private:
     };
 
     vector<Particle> _Particles;
-    VertexArray _Vertices;
+    sf::VertexArray _Vertices;
     Time _Lifetime;
     Vector2f _Center;
     unsigned int _MaxVelocity = 100;
@@ -29,11 +33,6 @@ private:
     unsigned int _MinAngle = 0;
     float _Radius = 0;
 
-    virtual void draw(RenderTarget& target, RenderStates states) const {
-        states.transform *= getTransform();
-        states.texture = nullptr;
-        target.draw(_Vertices, states);
-    }
     void resetParticle(size_t index) {
         float angle = ((rand() % (_MaxAngle - _MinAngle)) + _MinAngle )* 3.14f / 180.f;
         float speed = (rand() % (_MaxVelocity - _MinVelocity)) + _MinVelocity;
@@ -41,15 +40,6 @@ private:
         _Particles[index].lifetime = milliseconds((rand() % 2000) + 1000);
 
         _Vertices[index].position = _Center;
-    }
-
-public:
-
-    ParticleComponent(unsigned int numParticles, unsigned int lifetime = 3) :
-        _Particles(numParticles),
-        _Vertices(Points, numParticles),
-        _Lifetime(seconds(lifetime)),
-        _Center(0, 0) {
     }
 public:
 
@@ -59,6 +49,8 @@ public:
         _Vertices(Points, numParticles),
         _Lifetime(seconds(lifetime)),
         _Center(0, 0) { }
+
+    void Load(lua_State *L) override { }
 
     void setCenter(Vector2f position) {
         _Center = position;
@@ -88,23 +80,23 @@ public:
         }
     }
 
-    void setParticleColor(unsigned int r, unsigned int g, unsigned int b){
     void setParticleColor(unsigned int r, unsigned int g, unsigned int b) {
         r = static_cast<Uint8>(r);
         g = static_cast<Uint8>(g);
         b = static_cast<Uint8>(b);
         size_t numParticles = _Vertices.getVertexCount();
         for(size_t i = 0; i < numParticles; ++i){
-        for(size_t i = 0; i < numParticles; ++i) {
-            _Vertices[i].color.r = r;
-            _Vertices[i].color.g = g;
-            _Vertices[i].color.b = b;
+            for(size_t i = 0; i < numParticles; ++i) {
+                _Vertices[i].color.r = r;
+                _Vertices[i].color.g = g;
+                _Vertices[i].color.b = b;
+            }
         }
     }
     void update(Time elapsed) {
         for (size_t i = 0; i < _Particles.size(); ++i) {
             // update the particle lifetime
-            ParticleSystem& p = _Particles[i];
+            Particle& p = _Particles[i];
             p.lifetime -= elapsed;
 
             // if the particle is dead, respawn it
@@ -119,6 +111,4 @@ public:
             _Vertices[i].color.a = static_cast<Uint8>(ratio * 255);
         }
     }
-=======
->>>>>>> refs/heads/Develop
 };
