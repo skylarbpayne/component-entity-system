@@ -29,6 +29,8 @@
 #include "CollisionSystem.h"
 #include "ColliderComponent.h"
 #include "BehaviorSystem.h"
+#include "ParticleSystem.h"
+#include "ParticleComponent.h"
 
 bool TestScene::Load()
 {
@@ -38,6 +40,8 @@ bool TestScene::Load()
     sm.Add(ms);
     CollisionSystem* cs = new CollisionSystem(sf::Vector2f(this->GetWindow()->getSize()), sf::Vector2f(200, 200));
     sm.Add(cs);
+    ParticleSystem* ps = new ParticleSystem();
+    sm.Add(ps);
     BehaviorSystem* bs = new BehaviorSystem();
     sm.Add(bs);
 
@@ -54,6 +58,13 @@ bool TestScene::Load()
 
     ef.Create("entity2.lua", 50, 50);
     ef.Create("entity.lua", 400, 400);
+
+    Entity* e = new Entity("Particles Boi");
+    e->AttachComponent(new PositionComponent(100, 100));
+    e->AttachComponent(new ParticleComponent(1000));
+    AddEntityMessage msg;
+    msg.entity = e;
+    Emit<AddEntityMessage>(msg);
     return true;
 }
 

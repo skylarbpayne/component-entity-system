@@ -5,21 +5,13 @@
  * Created:     8-27-2013
  * Source File:  ParticleSystem.h
  */
-<<<<<<< HEAD
 
 using namespace sf;
 
-class ParticleSystem {
-    public:
-        Vector2f velocity;
-        Time lifetime;
-=======
  #pragma once
 
 #include "ISystem.h"
 #include "ParticleComponent.h"
-
-using namespace sf;
 
 class ParticleSystem : public ISystem {
 
@@ -36,7 +28,7 @@ public:
 
     ParticleSystem() : ISystem("Particle") { }
 
-    void update(Time elapsed) {
+    void Update(Time elapsed) override {
         set<unsigned int>::iterator it;
 
         for(it = _EntitiesToUpdate.begin(); it != _EntitiesToUpdate.end(); ++it) {
@@ -67,5 +59,4 @@ public:
 
         return e->HasComponent("Particle");
     }
->>>>>>> refs/heads/Develop
 };
