@@ -169,7 +169,7 @@ bool CollisionSystem::GetBins(Entity *e, std::set<unsigned int>& bins)
 
     for(unsigned int i = 0; i < 4; i++)
     {
-        if(bin[i] < 0 || bin[i] >= _NumBins)
+        if(bin[i] >= _NumBins)
         {
             return false;
         }
