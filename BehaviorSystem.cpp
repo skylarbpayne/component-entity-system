@@ -36,7 +36,7 @@ BehaviorSystem::~BehaviorSystem()
  */
 void BehaviorSystem::Update(sf::Time dt)
 {
-    std::list<IBehavior*>::iterator bit;
+    behaviorMap::iterator bit;
 
     for(unsigned int i = 0; i < this->GetEntities().size(); i++)
     {
@@ -47,7 +47,7 @@ void BehaviorSystem::Update(sf::Time dt)
 
         for(bit = this->GetEntities()[i]->_Behaviors.begin(); bit != this->GetEntities()[i]->_Behaviors.end(); bit++)
         {
-            (*bit)->Update();
+            (bit->second)->Update();
         }
     }
 }
@@ -61,16 +61,16 @@ void BehaviorSystem::OnMessage(CollisionMessage& msg)
     Entity* e1 = this->GetEntity(msg.ID1);
     Entity* e2 = this->GetEntity(msg.ID2);
 
-    std::list<IBehavior*>::iterator it;
+    behaviorMap::iterator it;
 
     for(it = e1->_Behaviors.begin(); it != e1->_Behaviors.end(); it++)
     {
-        (*it)->OnCollide(msg.ID2, msg.norm);
+        (it->second)->OnCollide(msg.ID2, msg.norm);
     }
 
     for(it = e2->_Behaviors.begin(); it != e2->_Behaviors.end(); it++)
     {
-        (*it)->OnCollide(msg.ID1, msg.norm);
+        (it->second)->OnCollide(msg.ID1, msg.norm);
     }
 }
 

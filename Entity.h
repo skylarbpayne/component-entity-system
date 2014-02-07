@@ -8,9 +8,12 @@
 
 #pragma once
 
-#include <list>
+#include "HashTable.h"
 #include "IComponent.h"
 #include "IBehavior.h"
+
+typedef std::unordered_map<const char*, IComponent*, eqstr, eqstr> componentMap;
+typedef std::unordered_map<const char*, IBehavior*, eqstr, eqstr> behaviorMap;
 
 class Entity
 {
@@ -19,11 +22,11 @@ friend class BehaviorSystem;
 private:
     unsigned int _ID;
     std::string _Tag;
-	std::list<IComponent*> _Components;
-    std::list<IBehavior*> _Behaviors;
+    componentMap _Components;
+    behaviorMap _Behaviors;
 private:
-    bool FindComponent(const char* type, std::list<IComponent*>::iterator& loc);
-    bool FindBehavior(const char* type, std::list<IBehavior*>::iterator& loc);
+    bool FindComponent(const char* type);
+    bool FindBehavior(const char* type);
 public:
     Entity(const char* tag = "") : _Tag(tag) { }
     ~Entity();
@@ -53,10 +56,9 @@ public:
 template<class T>
 T* Entity::GetComponent(const char* type)
 {
-    std::list<IComponent*>::iterator it;
-    if(this->FindComponent(type, it))
+    if(this->FindComponent(type))
     {
-        return static_cast<T*>(*it);
+        return static_cast<T*>(_Components[type]);
     }
 
     return nullptr;

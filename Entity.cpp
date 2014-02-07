@@ -16,27 +16,27 @@
  */
 Entity::~Entity()
 {
-    std::list<IComponent*>::iterator cit;
+    componentMap::iterator cit;
 
     for(cit = _Components.begin(); cit != _Components.end(); cit++)
     {
-        if(*cit)
+        if(cit->second)
         {
-            delete (*cit);
-            (*cit) = nullptr;
+            delete (cit->second);
+            (cit->second) = nullptr;
         }
     }
 
     _Components.clear();
 
-    std::list<IBehavior*>::iterator bit;
+    behaviorMap::iterator bit;
 
     for(bit = _Behaviors.begin(); bit != _Behaviors.end(); bit++)
     {
-        if(*bit)
+        if(bit->second)
         {
-            delete (*bit);
-            (*bit) = nullptr;
+            delete (bit->second);
+            (bit->second) = nullptr;
         }
     }
 
@@ -46,38 +46,21 @@ Entity::~Entity()
 /**
  * @brief Entity::FindComponent finds a specified component
  * @param type the type of component to look for
- * @param loc the location of the component if found
  * @return true if the component was found, false otherwise
  */
-bool Entity::FindComponent(const char* type, std::list<IComponent*>::iterator &loc)
+bool Entity::FindComponent(const char* type)
 {
-    for(loc = _Components.begin(); loc != _Components.end(); loc++)
-    {
-        if(strcmp((*loc)->GetType(), type) == 0)
-        {
-            return true;
-        }
-    }
-    return false;
+    return (_Components.find(type) != _Components.end());
 }
 
 /**
  * @brief Entity::FindBehavior finds a particular behavior
  * @param type the type of behavior to find
- * @param loc the location of the behavior, if found
  * @return true if the behavior was found, false otherwise
  */
-bool Entity::FindBehavior(const char* type, std::list<IBehavior*>::iterator& loc)
+bool Entity::FindBehavior(const char* type)
 {
-    for(loc = _Behaviors.begin(); loc != _Behaviors.end(); loc++)
-    {
-        if(strcmp((*loc)->GetType(), type) == 0)
-        {
-            return true;
-        }
-    }
-
-    return false;
+    return (_Behaviors.find(type) != _Behaviors.end());
 }
 
 /**
@@ -93,14 +76,13 @@ bool Entity::AttachComponent(IComponent* comp)
 		return false;
 	}
 
-	std::list<IComponent*>::iterator it;
-    if(this->FindComponent(comp->GetType(), it))
+    if(this->FindComponent(comp->GetType()))
 	{
         g_Logger << __FILE__ << ": " << __LINE__ << "-Error: " << comp->GetType() << " already attached to Entity" << this->_ID << "\n";
 		return false;
 	}
 
-	_Components.push_back(comp);
+    _Components[comp->GetType()] = comp;
     comp->_Parent = this;
 
     g_Logger << __FILE__ << ": " << __LINE__ << "-" << comp->GetType() << " was added to Entity " << this->_ID << "\n";
@@ -113,10 +95,9 @@ bool Entity::AttachComponent(IComponent* comp)
 **/
 void Entity::RemoveComponent(const char* type)
 {
-	std::list<IComponent*>::iterator it;
-    if(this->FindComponent(type, it))
+    if(this->FindComponent(type))
 	{
-		_Components.erase(it);
+        _Components.erase(type);
         g_Logger << __FILE__ << ": " << __LINE__ << "-" << type << " was removed from Entity " << this->_ID << "\n";
 	}
 }
@@ -128,8 +109,7 @@ void Entity::RemoveComponent(const char* type)
 **/
 bool Entity::HasComponent(const char* type)
 {
-    std::list<IComponent*>::iterator it;
-    return this->FindComponent(type, it);
+       return FindComponent(type);
 }
 
 /**
@@ -145,14 +125,13 @@ bool Entity::AttachBehavior(IBehavior* beh)
         return false;
     }
 
-    std::list<IBehavior*>::iterator it;
-    if(this->FindBehavior(beh->GetType(), it))
+    if(this->FindBehavior(beh->GetType()))
     {
         g_Logger << __FILE__ << ": " << __LINE__ << "-Error: " << beh->GetType() << " already attached to Entity" << this->_ID << "\n";
         return false;
     }
 
-    _Behaviors.push_back(beh);
+    _Behaviors[beh->GetType()] = beh;
     beh->_Parent = this;
 
     g_Logger << __FILE__ << ": " << __LINE__ << "-" << beh->GetType() << " was added to Entity " << this->_ID << "\n";
@@ -165,10 +144,9 @@ bool Entity::AttachBehavior(IBehavior* beh)
  */
 void Entity::RemoveBehavior(const char* type)
 {
-    std::list<IBehavior*>::iterator it;
-    if(this->FindBehavior(type, it))
+    if(this->FindBehavior(type))
     {
-        _Behaviors.erase(it);
+        _Behaviors.erase(type);
         g_Logger << __FILE__ << ": " << __LINE__ << "-" << type << " was removed from Entity " << this->_ID << "\n";
     }
 }
@@ -180,10 +158,9 @@ void Entity::RemoveBehavior(const char* type)
  */
 IBehavior* Entity::GetBehavior(const char *type)
 {
-    std::list<IBehavior*>::iterator it;
-    if(this->FindBehavior(type, it))
+    if(this->FindBehavior(type))
     {
-        return (*it);
+       return _Behaviors[type];
     }
 
     return nullptr;

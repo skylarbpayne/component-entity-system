@@ -13,12 +13,12 @@
 #include "IComponent.h"
 #include "IListener.h"
 
-typedef std::unordered_map<const char*, std::function<IComponent*()>, eqstr, eqstr> ConstructorMap;
+typedef std::unordered_map<const char*, std::function<IComponent*()>, eqstr, eqstr> constructorMap;
 
 class EntityFactory : public IListener<CreateEntityMessage>
 {
 private:
-    ConstructorMap _ConstructorMap;
+    constructorMap _ConstructorMap;
 private:
     void OnMessage(CreateEntityMessage& msg) override;
 public:

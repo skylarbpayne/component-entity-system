@@ -21,7 +21,7 @@
  */
 bool EntityFactory::Register(const char *componentType, std::function<IComponent*()> constructor)
 {
-    ConstructorMap::iterator it = _ConstructorMap.find(componentType);
+    constructorMap::iterator it = _ConstructorMap.find(componentType);
 
     if(it != _ConstructorMap.end())
     {

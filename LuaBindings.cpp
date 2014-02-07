@@ -17,7 +17,7 @@
 #include "Logger.h"
 
 /**
- * @brief The LuaAccessor struct allows Lua to gain access to wide access data.
+ * @brief The LuaAccessor struct allows Lua to gain access to window access data.
  */
 struct LuaAccessor : public WindowAccessor, public EntityAccessor
 {

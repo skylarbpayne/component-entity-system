@@ -120,9 +120,6 @@ bool CollisionSystem::CheckCollisions(unsigned int id, Vector2f &norm)
 
     for(bit = bins.begin(); bit != bins.end(); bit++)
     {
-        g_Logger << *bit << "\n";
-        g_Logger.flush();
-
         for(eit = _Bins[*bit].GetEntities().begin(); eit != _Bins[*bit].GetEntities().end(); eit++)
         {
             if(id == *eit)
