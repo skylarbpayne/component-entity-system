@@ -94,12 +94,9 @@ bool Entity::AttachComponent(IComponent* comp)
 	* @param type The component type to remove.
 **/
 void Entity::RemoveComponent(const char* type)
-{
-    if(this->FindComponent(type))
-	{
-        _Components.erase(type);
-        g_Logger << __FILE__ << ": " << __LINE__ << "-" << type << " was removed from Entity " << this->_ID << "\n";
-	}
+{ 
+    g_Logger << __FILE__ << ": " << __LINE__ << "-" << type << " was ";
+    g_Logger << (_Components.erase(type) > 0 ? "removed from " : "not in ") << "Entity " << this->_ID << "\n";
 }
 
 /**
@@ -144,11 +141,8 @@ bool Entity::AttachBehavior(IBehavior* beh)
  */
 void Entity::RemoveBehavior(const char* type)
 {
-    if(this->FindBehavior(type))
-    {
-        _Behaviors.erase(type);
-        g_Logger << __FILE__ << ": " << __LINE__ << "-" << type << " was removed from Entity " << this->_ID << "\n";
-    }
+    g_Logger << __FILE__ << ": " << __LINE__ << "-" << type << " was ";
+    g_Logger << (_Behaviors.erase(type) > 0 ? "removed from " : "not in ") << "Entity " << this->_ID << "\n";
 }
 
 /**

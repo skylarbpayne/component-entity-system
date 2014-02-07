@@ -18,14 +18,14 @@
  */
 SystemManager::~SystemManager()
 {
-    std::list<ISystem*>::iterator it;
+    systemMap::iterator it;
 
     for(it = _Systems.begin(); it != _Systems.end(); it++)
     {
-        if(*it)
+        if(it->second)
         {
-            delete (*it);
-            (*it) = nullptr;
+            delete (it->second);
+            (it->second) = nullptr;
         }
     }
 }
@@ -33,20 +33,11 @@ SystemManager::~SystemManager()
 /**
  * @brief SystemManager::Find finds a specified system
  * @param type the type of system to look for
- * @param loc the location of the system, if found
  * @return true if the system was found, false otherwise
  */
-bool SystemManager::Find(const char *type, std::list<ISystem*>::iterator &loc)
+bool SystemManager::Find(const char *type)
 {
-    for(loc = _Systems.begin(); loc != _Systems.end(); loc++)
-    {
-        if(strcmp((*loc)->GetType(), type) == 0)
-        {
-            return true;
-        }
-    }
-
-    return false;
+    return (_Systems.find(type) != _Systems.end());
 }
 
 /**
@@ -62,14 +53,13 @@ bool SystemManager::Add(ISystem* sys)
 		return false;
 	}
 
-	std::list<ISystem*>::iterator it;
-    if(this->Find(sys->GetType(), it))
+    if(this->Find(sys->GetType()))
 	{
         g_Logger << __FILE__ << ": " << __LINE__ << "-Error: " << sys->GetType() << " already exists in SystemManager\n";
 		return false;
 	}
 
-	_Systems.push_back(sys);
+    _Systems[sys->GetType()] = sys;
     g_Logger << __FILE__ << ": " << __LINE__ << "-" << sys->GetType() << " was added to SystemManager\n";
     g_Logger.flush();
 	return true;
@@ -81,12 +71,8 @@ bool SystemManager::Add(ISystem* sys)
 **/
 void SystemManager::Remove(const char* type)
 {
-	std::list<ISystem*>::iterator it;
-    if(this->Find(type, it))
-	{
-		_Systems.erase(it);
-        g_Logger << __FILE__ << ": " << __LINE__ << "-" << type << " was removed from the SystemManager\n";
-	}
+    g_Logger << __FILE__ << ": " << __LINE__ << "-" << type << " was ";
+    g_Logger << (_Systems.erase(type) > 0 ? "removed from " : "not in ") << "from the SystemManager\n";
 }
 
 /**
@@ -96,8 +82,7 @@ void SystemManager::Remove(const char* type)
 **/
 bool SystemManager::Has(const char* type)
 {
-    std::list<ISystem*>::iterator loc;
-    return this->Find(type, loc);
+    return this->Find(type);
 }
 
 /**
@@ -130,12 +115,12 @@ bool SystemManager::isActive() const
 **/
 void SystemManager::Update()
 {
-	std::list<ISystem*>::iterator it;
+    systemMap::iterator it;
 	for(it = _Systems.begin(); it != _Systems.end(); it++)
 	{
-		if( (*it) && (*it)->isActive())
+        if( (it->second) && (it->second)->isActive())
 		{
-            (*it)->Update(_SystemClock.getElapsedTime());
+            (it->second)->Update(_SystemClock.getElapsedTime());
 		}
 	}
     _SystemClock.restart();

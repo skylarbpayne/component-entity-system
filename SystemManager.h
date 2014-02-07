@@ -9,19 +9,21 @@
 
 #pragma once
 
-#include <list>
+#include "HashTable.h"
 #include <SFML/System.hpp>
 
 class ISystem;
+
+typedef std::unordered_map<const char*, ISystem*, eqstr, eqstr> systemMap;
 
 class SystemManager
 {
 private:
 	bool _Active;
     sf::Clock _SystemClock;
-	std::list<ISystem*> _Systems;
+    systemMap _Systems;
 private:
-    bool Find(const char* type, std::list<ISystem*>::iterator& loc);
+    bool Find(const char* type);
 public:
     SystemManager() : _Active(true) { }
     ~SystemManager();
