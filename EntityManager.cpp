@@ -95,14 +95,14 @@ void EntityManager::RemoveEntity(unsigned int ID)
 
     if(EntityAccessor::s_Entities[ID] != nullptr)
     {
-        delete EntityAccessor::s_Entities[ID];
-        EntityAccessor::s_Entities[ID] = nullptr;
-        _EntitySpaces.push_back(ID);
-
         EntityMessage msg;
         msg.ID = ID;
         msg.Destroyed = true;
         Emit<EntityMessage>(msg);
+
+        delete EntityAccessor::s_Entities[ID];
+        EntityAccessor::s_Entities[ID] = nullptr;
+        _EntitySpaces.push_back(ID);
     }
 }
 

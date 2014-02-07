@@ -45,6 +45,21 @@ void RenderSystem::insertRenderComponent(unsigned int id)
 void RenderSystem::removeRenderComponent(unsigned int id)
 {
     //Will remove entity later. Have to think through how to do this efficiently.
+    Entity* e = this->GetEntity(id);
+    IRenderComponent* rc = e->GetComponent<IRenderComponent>("Render");
+
+    if(rc->GetPriorityZ() < _RenderQueue.size())
+    {
+        //Find and remove
+        for(auto it = _RenderQueue[rc->GetPriorityZ()].begin(); it != _RenderQueue[rc->GetPriorityZ()].end(); it++)
+        {
+            if((*it) == rc)
+            {
+                _RenderQueue[rc->GetPriorityZ()].erase(it);
+                return;
+            }
+        }
+    }
 }
 
 bool RenderSystem::ValidateEntity(unsigned int ID)
