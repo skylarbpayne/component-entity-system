@@ -8,33 +8,25 @@
 #include "IRenderComponent.h"
 #include "RenderSystem.h"
 #include "Logger.h"
+#include <algorithm>
 
 void RenderSystem::Update(sf::Time dt)
 {
     //sort queue
     //iterate through queue and render.
-
     for(unsigned int i = 0; i < _RenderQueue.size(); i++)
     {
+        if(_sort)
+        {
+            std::sort (_RenderQueue[i].begin(), _RenderQueue[i].end(), _sort);
+        }
+
         for(unsigned int j = 0; j < _RenderQueue[i].size(); j++)
         {
             this->GetWindow()->draw(_RenderQueue[i][j]->GetDrawable());
         }
     }
-
-    /*
-    std::set<unsigned int>::iterator it;
-
-    for(it = _EntitiesToUpdate.begin(); it != _EntitiesToUpdate.end(); ++it)
-    {
-        Entity* e = this->GetEntity(*it);
-
-        IRenderComponent* rc = e->GetComponent<IRenderComponent>("Render");
-        this->GetWindow()->draw(rc->GetDrawable());
-
-    }*/
 }
-
 void RenderSystem::insertRenderComponent(unsigned int id)
 {
     Entity* e = this->GetEntity(id);

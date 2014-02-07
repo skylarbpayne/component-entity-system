@@ -24,6 +24,6 @@ private:
 public:
     virtual ~EntityFactory() { }
 
-    bool Register(const char* componentType, std::function<IComponent* ()> constructor);
+    bool Register(const char* componentType, std::function<IComponent*()> constructor);
     void Create(const char* entity, float x = 0, float y = 0);
 };
