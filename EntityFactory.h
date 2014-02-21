@@ -9,11 +9,11 @@
 #pragma once
 
 #include <functional>
-#include "HashTable.h"
+#include "HashMap.h"
 #include "IComponent.h"
 #include "IListener.h"
 
-typedef std::unordered_map<const char*, std::function<IComponent*()>, eqstr, eqstr> constructorMap;
+typedef hash_map<const char*, std::function<IComponent*()> > constructorMap;
 
 class EntityFactory : public IListener<CreateEntityMessage>
 {

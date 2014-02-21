@@ -3,7 +3,7 @@
     *
     * Author: Skylar Payne
     * Date: 7/18/2013
-    * File: HashTable.h
+    * File: HashMap.h
 **/
 
 #pragma once
@@ -22,7 +22,7 @@ struct eqstr
     inline size_t operator()(const char *s) const
     {
         size_t hash = 1;
-        for (; *s; ++s) hash = hash * 5 + *s;
+        for (; *s; ++s) hash = hash * 5 + tolower(*s);
         return hash;
     }
 
@@ -34,6 +34,12 @@ struct eqstr
      */
     inline bool operator()(const char *s1, const char *s2) const
     {
-        return strcmp(s1, s2) == 0;
+        for(int i = 0; s1[i] && s2[i]; i++)
+            if(tolower(s1[i]) != tolower(s2[i]))
+                return false;
+        return true;
     }
 };
+
+template<class KEY, class T>
+using hash_map = std::unordered_map<KEY, T, eqstr, eqstr>;

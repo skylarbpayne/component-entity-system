@@ -8,13 +8,13 @@
 
 #pragma once
 
-#include "HashTable.h"
+#include "HashMap.h"
 
 template<class T>
 class IResourceCache
 {
 protected:
-    std::unordered_map<const char*, T*, eqstr, eqstr> _Resources;
+    hash_map<const char*, T*> _Resources;
 public:
     /**
      * @brief IResourceCache initializes the resource hash table

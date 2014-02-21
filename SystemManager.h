@@ -9,12 +9,12 @@
 
 #pragma once
 
-#include "HashTable.h"
+#include "HashMap.h"
 #include <SFML/System.hpp>
 
 class ISystem;
 
-typedef std::unordered_map<const char*, ISystem*, eqstr, eqstr> systemMap;
+typedef hash_map<const char*, ISystem*> systemMap;
 
 class SystemManager
 {

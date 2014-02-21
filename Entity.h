@@ -8,12 +8,12 @@
 
 #pragma once
 
-#include "HashTable.h"
+#include "HashMap.h"
 #include "IComponent.h"
 #include "IBehavior.h"
 
-typedef std::unordered_map<const char*, IComponent*, eqstr, eqstr> componentMap;
-typedef std::unordered_map<const char*, IBehavior*, eqstr, eqstr> behaviorMap;
+typedef hash_map<const char*, IComponent*> componentMap;
+typedef hash_map<const char*, IBehavior*> behaviorMap;
 
 class Entity
 {
