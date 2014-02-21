@@ -14,7 +14,7 @@ void RenderSystem::Update(sf::Time dt)
 {
     //sort queue
     //iterate through queue and render.
-    for(unsigned int i = 0; i < _RenderQueue.size(); i++)
+    for(unsigned int i = _RenderQueue.size() - 1; i >= 0; i--)
     {
         if(_sort)
         {
