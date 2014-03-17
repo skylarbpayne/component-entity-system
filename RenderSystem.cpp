@@ -27,10 +27,10 @@ void RenderSystem::Update(sf::Time dt)
         }
     }
 }
-void RenderSystem::insertRenderComponent(unsigned int id)
+void RenderSystem::insertRenderComponent(unsigned int id, const char* type)
 {
     Entity* e = this->GetEntity(id);
-    IRenderComponent* rc = e->GetComponent<IRenderComponent>("Render");
+    IRenderComponent* rc = e->GetComponent<IRenderComponent>(type);
 
     if(rc->GetPriorityZ() >= _RenderQueue.size())
     {
@@ -42,11 +42,11 @@ void RenderSystem::insertRenderComponent(unsigned int id)
     _RenderQueue[rc->GetPriorityZ()].push_back(rc);
 }
 
-void RenderSystem::removeRenderComponent(unsigned int id)
+void RenderSystem::removeRenderComponent(unsigned int id, const char* type)
 {
     //Will remove entity later. Have to think through how to do this efficiently.
     Entity* e = this->GetEntity(id);
-    IRenderComponent* rc = e->GetComponent<IRenderComponent>("Render");
+    IRenderComponent* rc = e->GetComponent<IRenderComponent>(type);
 
     if(rc->GetPriorityZ() < _RenderQueue.size())
     {
@@ -65,12 +65,14 @@ void RenderSystem::removeRenderComponent(unsigned int id)
 bool RenderSystem::ValidateEntity(unsigned int ID)
 {
     Entity* e = this->GetEntity(ID);
-    if(e->HasComponent("Render"))
-    {
-        insertRenderComponent(ID);
-        return true;
+    bool validated = false;
+    for(const char* type : _renderTypes) {
+        if(e->HasComponent(type)) {
+            insertRenderComponent(ID, type);
+            validated = true;
+        }
     }
-    return false;
+    return validated;
 }
 
 void RenderSystem::OnMessage(EntityMovedMessage& msg)
@@ -78,7 +80,10 @@ void RenderSystem::OnMessage(EntityMovedMessage& msg)
     if(_EntitiesToUpdate.find(msg.ID) != _EntitiesToUpdate.end())
     {
         Entity* e = this->GetEntity(msg.ID);
-        IRenderComponent* rc = e->GetComponent<IRenderComponent>("Render");
-        rc->SetPosition(msg.newPosition);
+        for(const char* type : _renderTypes) {
+            IRenderComponent* rc = e->GetComponent<IRenderComponent>(type);
+            if(rc)
+                rc->SetPosition(msg.newPosition);
+        }
     }
 }

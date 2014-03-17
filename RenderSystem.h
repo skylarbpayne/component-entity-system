@@ -10,7 +10,6 @@
 #include "ISystem.h"
 #include "WindowAccessor.h"
 #include "IListener.h"
-//#include <functional>
 
 class IRenderComponent;
 
@@ -23,9 +22,10 @@ private:
     unsigned int _depth;
     renderQueue _RenderQueue;
     renderSort _sort;
+    std::vector<const char*> _renderTypes = {"sprite", "rectangle", "circle", "text", "particle" };
     void OnMessage(EntityMovedMessage& msg) override;
-    void insertRenderComponent(unsigned int id);
-    void removeRenderComponent(unsigned int id);
+    void insertRenderComponent(unsigned int id, const char* type);
+    void removeRenderComponent(unsigned int id, const char* type);
 public:
     RenderSystem(unsigned int depth = 1, renderSort sort = nullptr) :
         ISystem("Render"), _depth(depth), _RenderQueue(_depth), _sort(sort) { }

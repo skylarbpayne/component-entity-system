@@ -15,7 +15,7 @@ class IRenderComponent : public IComponent{
 private:
     unsigned int _priorityZ;
 public:
-    IRenderComponent(unsigned int z = 0) : IComponent("Render"), _priorityZ(z) {
+    IRenderComponent(const char* type, unsigned int z = 0) : IComponent(type), _priorityZ(z) {
     }
     virtual sf::Drawable const& GetDrawable() const = 0;
     virtual void SetPosition(sf::Vector2f const& pos) = 0;

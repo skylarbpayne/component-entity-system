@@ -18,7 +18,7 @@ friend class RenderSystem;
 private:
     RectangleShape _Rectangle;
 public:
-    RectangleComponent(){
+    RectangleComponent() : IRenderComponent("rectangle") {
         _Rectangle.setSize(Vector2f(100, 50));
         _Rectangle.setFillColor(sf::Color::Red);
     }
