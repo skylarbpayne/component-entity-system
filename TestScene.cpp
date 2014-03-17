@@ -22,12 +22,14 @@
 #include "RectangleComponent.h"
 #include "SpriteComponent.h"
 #include "TextComponent.h"
+#include "ParticleComponent.h"
 #include "Entity.h"
 #include "RenderSystem.h"
 #include "ScriptableBehavior.h"
 #include "CollisionSystem.h"
 #include "ColliderComponent.h"
 #include "BehaviorSystem.h"
+#include "ParticleSystem.h"
 
 bool TestScene::Load()
 {
@@ -39,6 +41,8 @@ bool TestScene::Load()
     sm.Add(cs);
     BehaviorSystem* bs = new BehaviorSystem();
     sm.Add(bs);
+    ParticleSystem* ps = new ParticleSystem();
+    sm.Add(ps);
 
     ef.Register("Position", []() { return new PositionComponent(); });
     ef.Register("Movement", []() { return new MovementComponent(); });
@@ -47,12 +51,37 @@ bool TestScene::Load()
     ef.Register("Rectangle", []() { return new RectangleComponent(); });
     ef.Register("Sprite", []() { return new SpriteComponent(); });
     ef.Register("Text", []() { return new TextComponent(); });
+    //This will be a tad trickier to get lua integration with. Because of the memory allocation involved.
+    //ef.Register("Particle", []() { return new ParticleComponent();})
 
     rm.AddFont("Lorena.ttf");
     rm.AddTexture("spaceship.png");
 
     ef.Create("entity2.lua", 50, 50);
-    ef.Create("entity.lua", 400, 400);
+    //ef.Create("entity.lua", 400, 400);
+
+    Entity* e = new Entity("particleman");
+    IComponent* ic = new PositionComponent(300, 200);
+    e->AttachComponent(ic);
+    ic = new MovementComponent();
+    e->AttachComponent(ic);
+    ic = new ColliderComponent(0, 0, 20, 20);
+    e->AttachComponent(ic);
+    ic = new CircleComponent();
+    e->AttachComponent(ic);
+    ic = new ParticleComponent(10000);
+    e->AttachComponent(ic);
+    ScriptableBehavior* sb = new ScriptableBehavior("move", "move.lua");
+    e->AttachBehavior(sb);
+
+    AddEntityMessage msg;
+    msg.entity = e;
+    Emit<AddEntityMessage>(msg);
+
+    EntityMovedMessage mmsg;
+    mmsg.ID = e->GetID();
+    mmsg.newPosition = mmsg.oldPosition = sf::Vector2f(300, 200);
+    Emit<EntityMovedMessage>(mmsg);
 
     return true;
 }

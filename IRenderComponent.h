@@ -12,7 +12,7 @@
 
 class IRenderComponent : public IComponent{
     friend class RenderSystem;
-private:
+protected:
     unsigned int _priorityZ;
 public:
     IRenderComponent(const char* type, unsigned int z = 0) : IComponent(type), _priorityZ(z) {
