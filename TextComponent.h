@@ -19,7 +19,7 @@ friend class RenderSystem;
 private:
     Text _XText;
 public:
-    TextComponent() : IRenderComponent("text") {
+    TextComponent(unsigned int z = 0, sf::Vector2f offset = sf::Vector2f(0.f, 0.f)) : IRenderComponent("text", z, offset) {
         _XText.setString("Text");
     }
 

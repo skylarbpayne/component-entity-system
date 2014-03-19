@@ -69,7 +69,7 @@ bool TestScene::Load()
     e->AttachComponent(ic);
     ic = new CircleComponent();
     e->AttachComponent(ic);
-    ic = new ParticleComponent(10000);
+    ic = new ParticleComponent(10000, 0, sf::Vector2f(50.f, 50.f));
     e->AttachComponent(ic);
     ScriptableBehavior* sb = new ScriptableBehavior("move", "move.lua");
     e->AttachBehavior(sb);

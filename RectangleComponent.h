@@ -18,7 +18,7 @@ friend class RenderSystem;
 private:
     RectangleShape _Rectangle;
 public:
-    RectangleComponent() : IRenderComponent("rectangle") {
+    RectangleComponent(unsigned int z = 0, sf::Vector2f offset = sf::Vector2f(0.f, 0.f)) : IRenderComponent("rectangle", z, offset) {
         _Rectangle.setSize(Vector2f(100, 50));
         _Rectangle.setFillColor(sf::Color::Red);
     }

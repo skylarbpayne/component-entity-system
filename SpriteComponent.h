@@ -18,7 +18,7 @@ friend class RenderSystem;
 private:
     Sprite _XSprite;
 public:
-    SpriteComponent() : IRenderComponent("sprite") { }
+    SpriteComponent(unsigned int z = 0, sf::Vector2f offset = sf::Vector2f(0.f, 0.f)) : IRenderComponent("sprite",z , offset) { }
     void SetPosition(const Vector2f &pos) override
     {
         _XSprite.setPosition(pos);

@@ -18,7 +18,7 @@ friend class RenderSystem;
 private:
     CircleShape _Circle;
 public:
-    CircleComponent() : IRenderComponent("circle") {
+    CircleComponent(unsigned int z = 0, sf::Vector2f offset = sf::Vector2f(0.f, 0.f)) : IRenderComponent("circle", z, offset) {
         _Circle.setRadius(10);
         _Circle.setFillColor(Color::Red);
     }

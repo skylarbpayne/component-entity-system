@@ -14,11 +14,14 @@ class IRenderComponent : public IComponent{
     friend class RenderSystem;
 protected:
     unsigned int _priorityZ;
+    sf::Vector2f _offset;
+
 public:
-    IRenderComponent(const char* type, unsigned int z = 0) : IComponent(type), _priorityZ(z) {
+    IRenderComponent(const char* type, unsigned int z = 0, sf::Vector2f offset = sf::Vector2f(0.f, 0.f)) : IComponent(type), _priorityZ(z), _offset(offset) {
     }
     virtual sf::Drawable const& GetDrawable() const = 0;
     virtual void SetPosition(sf::Vector2f const& pos) = 0;
     unsigned int GetPriorityZ() const { return _priorityZ; }
+    sf::Vector2f GetOffset() const { return _offset; }
     virtual ~IRenderComponent( ) {    }
 };

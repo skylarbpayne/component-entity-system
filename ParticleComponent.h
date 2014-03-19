@@ -43,7 +43,7 @@ private:
     Particles _particles;
     sf::Time _lifeTime;
 public:
-    ParticleComponent(unsigned int count) : IRenderComponent("particle"), _particleInfo(count),
+    ParticleComponent(unsigned int count, unsigned int z = 0, sf::Vector2f offset = sf::Vector2f(0.f, 0.f)) : IRenderComponent("particle", z, offset), _particleInfo(count),
         _particles(count), _lifeTime(sf::seconds(3)) { }
 
     void resetParticle(unsigned int index) {

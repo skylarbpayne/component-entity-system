@@ -83,7 +83,7 @@ void RenderSystem::OnMessage(EntityMovedMessage& msg)
         for(const char* type : _renderTypes) {
             IRenderComponent* rc = e->GetComponent<IRenderComponent>(type);
             if(rc)
-                rc->SetPosition(msg.newPosition);
+                rc->SetPosition(msg.newPosition + rc->GetOffset());
         }
     }
 }
