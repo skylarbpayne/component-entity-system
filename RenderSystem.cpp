@@ -44,7 +44,6 @@ void RenderSystem::insertRenderComponent(unsigned int id, const char* type)
 
 void RenderSystem::removeRenderComponent(unsigned int id, const char* type)
 {
-    //Will remove entity later. Have to think through how to do this efficiently.
     Entity* e = this->GetEntity(id);
     IRenderComponent* rc = e->GetComponent<IRenderComponent>(type);
 
@@ -83,7 +82,7 @@ void RenderSystem::OnMessage(EntityMovedMessage& msg)
         for(const char* type : _renderTypes) {
             IRenderComponent* rc = e->GetComponent<IRenderComponent>(type);
             if(rc)
-                rc->SetPosition(msg.newPosition + rc->GetOffset());
+                rc->SetPosition(sf::Vector2f(msg.newPosition.x + rc->GetOffset().x, msg.newPosition.y + rc->GetOffset().y));
         }
     }
 }

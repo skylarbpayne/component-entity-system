@@ -51,37 +51,13 @@ bool TestScene::Load()
     ef.Register("Rectangle", []() { return new RectangleComponent(); });
     ef.Register("Sprite", []() { return new SpriteComponent(); });
     ef.Register("Text", []() { return new TextComponent(); });
-    //This will be a tad trickier to get lua integration with. Because of the memory allocation involved.
-    //ef.Register("Particle", []() { return new ParticleComponent();})
+    ef.Register("Particle", []() { return new ParticleComponent();});
 
     rm.AddFont("Lorena.ttf");
     rm.AddTexture("spaceship.png");
 
     ef.Create("entity2.lua", 50, 50);
-    //ef.Create("entity.lua", 400, 400);
-
-    Entity* e = new Entity("particleman");
-    IComponent* ic = new PositionComponent(300, 200);
-    e->AttachComponent(ic);
-    ic = new MovementComponent();
-    e->AttachComponent(ic);
-    ic = new ColliderComponent(0, 0, 20, 20);
-    e->AttachComponent(ic);
-    ic = new CircleComponent();
-    e->AttachComponent(ic);
-    ic = new ParticleComponent(10000, 0, sf::Vector2f(50.f, 50.f));
-    e->AttachComponent(ic);
-    ScriptableBehavior* sb = new ScriptableBehavior("move", "move.lua");
-    e->AttachBehavior(sb);
-
-    AddEntityMessage msg;
-    msg.entity = e;
-    Emit<AddEntityMessage>(msg);
-
-    EntityMovedMessage mmsg;
-    mmsg.ID = e->GetID();
-    mmsg.newPosition = mmsg.oldPosition = sf::Vector2f(300, 200);
-    Emit<EntityMovedMessage>(mmsg);
+    ef.Create("entity.lua", 400, 400);
 
     return true;
 }

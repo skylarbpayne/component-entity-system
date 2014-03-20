@@ -41,7 +41,7 @@ public:
         return _XSprite.getTexture();
     }
 
-    void Load(lua_State *L) override
+    void rLoad(lua_State *L) override
     {
         lua_pushstring(L, "texture");
         lua_gettable(L, -2);
@@ -51,7 +51,7 @@ public:
         lua_getglobal(L, "x");
         lua_getglobal(L, "y");
 
-        _XSprite.setPosition(lua_tonumber(L, -2), lua_tonumber(L, -1));
+        _XSprite.setPosition(lua_tonumber(L, -2) + _offset.x, lua_tonumber(L, -1) + _offset.y);
         lua_pop(L, 2);
     }
 };

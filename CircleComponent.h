@@ -45,7 +45,7 @@ public:
         return _Circle.getFillColor();
     }
 
-    void Load(lua_State *L) override
+    void rLoad(lua_State *L) override
     {
         sf::Color color;
 
@@ -79,7 +79,7 @@ public:
         lua_getglobal(L, "x");
         lua_getglobal(L, "y");
 
-        _Circle.setPosition(lua_tonumber(L, -2), lua_tonumber(L, -1));
+        _Circle.setPosition(lua_tonumber(L, -2) + _offset.x, lua_tonumber(L, -1) + _offset.y);
         lua_pop(L, 2);
     }
 

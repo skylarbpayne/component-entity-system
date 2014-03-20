@@ -11,6 +11,8 @@
 #include "IRenderComponent.h"
 #include "SFML/Graphics.hpp"
 
+#include "Logger.h"
+
 class Particles : public sf::Drawable, public sf::Transformable
 {
     friend class ParticleComponent;
@@ -43,8 +45,13 @@ private:
     Particles _particles;
     sf::Time _lifeTime;
 public:
-    ParticleComponent(unsigned int count, unsigned int z = 0, sf::Vector2f offset = sf::Vector2f(0.f, 0.f)) : IRenderComponent("particle", z, offset), _particleInfo(count),
-        _particles(count), _lifeTime(sf::seconds(3)) { }
+    ParticleComponent(unsigned int count = 0, unsigned int z = 0, sf::Vector2f offset = sf::Vector2f(0.f, 0.f)) :
+        IRenderComponent("Particle", z, offset), _particleInfo(count), _particles(count), _lifeTime(sf::seconds(3)) { }
+
+    void resizeParticles(unsigned int count) {
+        _particles._vertices.resize(count);
+        _particleInfo.resize(count);
+    }
 
     void resetParticle(unsigned int index) {
         float angle = (rand() % 360) * 3.14f / 180.f;
@@ -54,7 +61,26 @@ public:
         _particles._vertices[index].position = _particles.getPosition();
     }
 
-    void Load(lua_State *L) { }
+    void rLoad(lua_State *L) override
+    {
+
+        lua_pushstring(L, "count");
+        lua_gettable(L, -2);
+        this->resizeParticles(lua_tonumber(L, -1));
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "lifetime");
+        lua_gettable(L, -2);
+        _lifeTime = sf::seconds(lua_tonumber(L, -1));
+        lua_pop(L, 1);
+
+        lua_getglobal(L, "x");
+        lua_getglobal(L, "y");
+
+        _particles.setPosition(lua_tonumber(L, -2) + _offset.x, lua_tonumber(L, -1) + _offset.y);
+        lua_pop(L, 2);
+    }
+
     sf::Drawable const& GetDrawable() const { return _particles; }
     void SetPosition(sf::Vector2f const& pos) {
         _particles.setPosition(sf::Vector2f(pos.x + 10, pos.y + 10));
